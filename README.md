@@ -38,3 +38,7 @@ luego hacemos el push
 Luego de subir la rama, hay que ir a github.com y hacer la solicitud de cambios, eso la verdad nunca lo he hecho, asi que les anexo el tutorial de gitub xD
 
 https://docs.github.com/es/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request?tool=webui
+
+ya que se aprueve el pull request se puede eliminar la rama de la feature con el comando
+
+`git branch -d <nombre de la rama>`
