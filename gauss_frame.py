@@ -39,11 +39,4 @@ def get_gauss_frame(window):
 
     gauss_frame.grid(column=0, row=0, sticky='SNEW')
 
-
-a = Tk()
-a.columnconfigure(0, weight=1)
-a.rowconfigure(0, weight=1)
-get_gauss_frame(a)
-
-
-a.mainloop()
+print('hola')
