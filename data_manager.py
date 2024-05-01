@@ -24,5 +24,5 @@ def delete_act():
 def update_completition():
     pass
 
-def get_act():
+def get_activities_gantt():
     return act.to_numpy()
