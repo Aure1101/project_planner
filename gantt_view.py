@@ -7,7 +7,6 @@ class Gantt(tk.Frame):
         super().__init__(parent)
         self.color_pallete = color_pallete
         self.refresh_activities()
-        self.grid(row=0, column=0, sticky='NSEW')
 
 
 
@@ -15,7 +14,7 @@ class Gantt(tk.Frame):
         self.grid_forget()
         activities = dm.get_activities_gantt()
 
-        if activities:
+        if activities != []:
             max_time = max(activities[:,2] + activities[:,3])
 
             act_label = tk.Label(self, text='Actividad')
@@ -44,3 +43,5 @@ class Gantt(tk.Frame):
 
             for row in range(self.grid_size()[1]):
                 self.rowconfigure(row, weight=1)
+            
+        self.grid(row=0, column=0, sticky='NSEW')
