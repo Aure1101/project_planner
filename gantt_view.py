@@ -14,7 +14,8 @@ class Gantt(tk.Frame):
         self.grid_forget()
         activities = dm.get_activities_gantt()
 
-        if activities != []:
+        if activities.any():
+
             max_time = max(activities[:,2] + activities[:,3])
 
             act_label = tk.Label(self, text='Actividad')
