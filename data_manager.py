@@ -58,6 +58,10 @@ def delete_act():
 def update_completition():
     pass
 
+def get_activities_pertcpm():
+    act = pd.read_csv('actividades.csv')
+    return act[['nombre_actividad', 'responsable', 'tiempo_optimista', 'tiempo_pesimista', 'tiempo_esperado', 'fecha_inicio']].to_numpy()
+
 def get_activities_gantt():
     act = pd.read_csv('actividades.csv')
     return act[['nombre_actividad', 'responsable','fecha_inicio', 'tiempo_esperado', 'porcentaje_terminado']].to_numpy()
