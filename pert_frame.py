@@ -1,7 +1,7 @@
-import data_manager as dm
-import numpy as np
+import data_manager as dm # Imprtar el archivo data_manager
+import numpy as np # Importar la biblioteca numpy
 
-actividades = dm.get_activities_gantt()
+actividades = dm.get_activities_gantt() # Instanciar el objeto para las actividades
 
 def calcular_varianza(actividades): # Metodo para calcular la varianza 
     varianzas = [] # Arreglo para almacenar los datos 
@@ -14,5 +14,7 @@ def calcular_varianza(actividades): # Metodo para calcular la varianza
     return varianza_total # Retornar el calculo
 
 def calcular_probabilidad(varianza_total):
+
+    
     pass
 
