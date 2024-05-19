@@ -27,7 +27,7 @@ else:
     dep = pd.read_csv('dependencias.csv')
 
 
-def create_act(nombre, responsable, tiempo_esperado, tiempo_optimista, tiempo_mas_probable, tiempo_pesimista, tiempo_acelerado, fecha_inicio, costo_esperado, costo_acelerado):
+def create_act(nombre, responsable, tiempo_esperado, tiempo_optimista, tiempo_mas_probable, tiempo_pesimista, tiempo_acelerado, costo_esperado, costo_acelerado, dependencias):
     print('hola')
     act = pd.read_csv('actividades.csv')
     row = pd.DataFrame({'nombre_actividad': [nombre], 
@@ -37,16 +37,17 @@ def create_act(nombre, responsable, tiempo_esperado, tiempo_optimista, tiempo_ma
                         'tiempo_mas_probable':[tiempo_mas_probable], 
                         'tiempo_pesimista': [tiempo_pesimista],
                         'tiempo_acelerado': [tiempo_acelerado],
-                        'fecha_inicio': [fecha_inicio], 
+                        'fecha_inicio': [get_starting_date(dependencias)], 
                         'costo_esperado': [costo_esperado],
                         'costo_acelerado': [costo_acelerado],
                         'porcentaje_terminado': [0]})
     act = pd.concat([act,row])
     act.to_csv('actividades.csv', index=False)
+    add_dependencies(nombre, dependencias)
 
-def add_dependencies(depen):
+def add_dependencies(depender, dependencias):
     dep = pd.read_csv('dependencias.csv')
-    for depender, dependee in depen:
+    for dependee in dependencias:
         row = pd.DataFrame({'actividad': [depender],
                             'dependencia': [dependee]})
         dep = pd.concat([dep,row])
@@ -65,3 +66,10 @@ def get_activities_pertcpm():
 def get_activities_gantt():
     act = pd.read_csv('actividades.csv')
     return act[['nombre_actividad', 'responsable','fecha_inicio', 'tiempo_esperado', 'porcentaje_terminado']].to_numpy()
+
+def get_starting_date(dependencias):
+    act = pd.read_csv('actividades.csv')
+    act = act[['nombre_actividad', 'tiempo_esperado', 'fecha_inicio']]
+    act = act.loc[act['nombre_actividad'].isin(dependencias)]
+    start_date = max(act['tiempo_esperado'] + act['fecha_inicio'])
+    return start_date
