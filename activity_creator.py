@@ -88,7 +88,7 @@ def open_(parent):
     agregar = tk.Button(ventana_agregar, text='agregar', command=lambda: agregar_actividad(parent, act_nombre.get(), act_responsable.get(), t_esperado.get(), t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_acelerado.get(), c_esperado.get(), c_acelerado.get(), d_variables))
     agregar.grid(row = 4, column = 0)
 
-
+from scipy.stats import norm
 def agregar_actividad(parent, act_nombre, act_responsable, t_esperado, t_optimista, t_m_probable, t_pesimista, t_acelerado, c_esperado, c_acelerado, dependencias):
     print(dependencias)
     if all(map(lambda x: x.get() == '', dependencias)):
