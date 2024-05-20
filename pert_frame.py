@@ -1,5 +1,6 @@
 import data_manager as dm # Imprtar el archivo data_manager
 import numpy as np # Importar la biblioteca numpy
+from scipy.stats import norm
 
 actividades = dm.get_activities_gantt() # Instanciar el objeto para las actividades
 
@@ -13,8 +14,13 @@ def calcular_varianza(actividades): # Metodo para calcular la varianza
     varianza_total = np.sum(varianzas) # SUmar los datos del arreglo
     return varianza_total # Retornar el calculo
 
-def calcular_probabilidad(varianza_total):
+def calcular_tiempo_esperado_total(actividades):
+    tiempo_esperado_total = actividades['tiempo_esperado'].sum()
+    return tiempo_esperado_total
 
-    
-    pass
-
+def calcular_probabilidad(tiempo_esperado_total, varianza_total, fecha_limite):
+    desviacion_estandar_total = np.sqrt(varianza_total)
+    Z = (fecha_limite - tiempo_esperado_total) / desviacion_estandar_total
+    probabilidad = norm.cdf(Z)
+    return probabilidad
+ 
