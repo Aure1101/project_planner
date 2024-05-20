@@ -37,7 +37,7 @@ def create_act(nombre, responsable, tiempo_esperado, tiempo_optimista, tiempo_ma
                         'tiempo_mas_probable':[tiempo_mas_probable], 
                         'tiempo_pesimista': [tiempo_pesimista],
                         'tiempo_acelerado': [tiempo_acelerado],
-                        'fecha_inicio': [get_starting_date(dependencias)], 
+                        'fecha_inicio': [get_starting_date(dependencias) if dependencias != [] else 0], 
                         'costo_esperado': [costo_esperado],
                         'costo_acelerado': [costo_acelerado],
                         'porcentaje_terminado': [0]})
