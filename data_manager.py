@@ -73,3 +73,9 @@ def get_starting_date(dependencias):
     act = act.loc[act['nombre_actividad'].isin(dependencias)]
     start_date = max(act['tiempo_esperado'] + act['fecha_inicio'])
     return start_date
+
+def get_dependencies(actividad):
+    dep = pd.read_csv('dependencias.csv')
+    mask = dep['actividad'] == actividad
+    print(dep[mask].to_numpy()[:, 1])
+    return dep[mask].to_numpy()[:, 1]
