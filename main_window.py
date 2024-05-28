@@ -12,6 +12,7 @@ display = tk.Frame(window)
 gantt = Gantt(display)
 
 add_button = tk.Button(menu, text = 'Añadir Actividad', command=lambda:ac.open_(gantt))
+edit_button = tk.Button(menu, text='Editar Actividad')
 #En lugar de estos botones podriamos usar pestañas para cambiar entre las vistas
 gauss_button = tk.Button(menu, text = 'Visualizar\nDiagrama de Gantt')
 pert_button = tk.Button(menu, text = 'Visualizar\nPERT-CPM')
@@ -19,6 +20,7 @@ pert_button = tk.Button(menu, text = 'Visualizar\nPERT-CPM')
 menu.grid(column=1, row=0)
 display.grid(column=0, row=0, sticky='NSEW')
 add_button.grid(column=0, row=0, columnspan=2)
+edit_button.grid(column=0, row=1, columnspan=2)
 gauss_button.grid(column=0, row=1)
 pert_button.grid(column=1, row=1)
 

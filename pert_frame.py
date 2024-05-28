@@ -70,9 +70,7 @@ def display_in_tkinter(act_df, probability):
     
     tree.heading('Nombre', text='Nombre')
     tree.heading('Responsable', text='Responsable')
-    tree.heading('Fecha Inicio', text='Fecha Inicio')
     tree.heading('Tiempo Esperado', text='Tiempo Esperado')
-    tree.heading('Porcentaje Terminado', text='Porcentaje Terminado')
     tree.heading('ES', text='ES')
     tree.heading('EF', text='EF')
     tree.heading('LS', text='LS')
@@ -105,7 +103,8 @@ if __name__ == "__main__":
     for activity in actividades_con_varianza:
         act_df.loc[act_df['nombre_actividad'] == activity[0], 'Varianza'] = activity[5]
 
-    max_time = max(act_df['fecha_inicio'] + act_df['tiempo_esperado'])
+    max_time = 12 
+    #"max(act_df['fecha_inicio'] + act_df['tiempo_esperado'])
     probabilidad = calcular_probabilidad(max_time, actividades_con_varianza)
 
     display_in_tkinter(act_df, probabilidad)
