@@ -1,26 +1,64 @@
-import data_manager as dm # Imprtar el archivo data_manager
-import numpy as np # Importar la biblioteca numpy
+import data_manager as dm
+from math import sqrt
 from scipy.stats import norm
+import pandas as pd
 
-actividades = dm.get_activities_gantt() # Instanciar el objeto para las actividades
+def calcular_varianza(t_optimista, t_pesimista):
+    return ((t_pesimista - t_optimista) / 6) ** 2
 
-def calcular_varianza(actividades): # Metodo para calcular la varianza 
-    varianzas = [] # Arreglo para almacenar los datos 
-    for actividad in actividades: # Iteracion de cada fila de las actividades 
-        TO = actividad['tiempo_optimista'] # Guardar en una variable el tiempo Optimista 
-        TP = actividad['tiempo_pesimista'] # Guardar en una variable el tiempo pesimista 
-        varianza = ((TP - TO) / 6) ** 2 # Calculo de la varianza 
-        varianzas.append(varianza) # Agregar al calculo al arreglo
-    varianza_total = np.sum(varianzas) # SUmar los datos del arreglo
-    return varianza_total # Retornar el calculo
+def obtener_actividades_con_varianza():
+    # Obtener actividades utilizando el método de data_manager
+    activities = dm.get_activities_gantt()
+    
+    # Leer actividades completas desde el CSV
+    act_df = pd.read_csv('actividades.csv')
+    
+    actividades_con_varianza = []
+    
+    for activity in activities:
+        nombre = activity[0]
+        responsable = activity[1]
+        fecha_inicio = activity[2]
+        tiempo_esperado = activity[3]
+        porcentaje_terminado = activity[4]
+        
+        # Obtener los datos completos de la actividad desde el DataFrame
+        act_row = act_df[act_df['nombre_actividad'] == nombre].iloc[0]
+        
+        tiempo_optimista = act_row['tiempo_optimista']
+        tiempo_pesimista = act_row['tiempo_pesimista']
+        
+        # Calcular la varianza
+        varianza = calcular_varianza(tiempo_optimista, tiempo_pesimista)
+        
+        # Añadir los datos a la lista
+        actividades_con_varianza.append((nombre, responsable, fecha_inicio, tiempo_esperado, porcentaje_terminado, varianza))
+    
+    return actividades_con_varianza
 
-def calcular_tiempo_esperado_total(actividades):
-    tiempo_esperado_total = actividades['tiempo_esperado'].sum()
-    return tiempo_esperado_total
-
-def calcular_probabilidad(tiempo_esperado_total, varianza_total, fecha_limite):
-    desviacion_estandar_total = np.sqrt(varianza_total)
-    Z = (fecha_limite - tiempo_esperado_total) / desviacion_estandar_total
+def calcular_probabilidad(tiempo_objetivo, actividades_con_varianza):
+    # Calcular el tiempo esperado total del proyecto
+    tiempo_esperado_proyecto = sum(act[3] for act in actividades_con_varianza)
+    
+    # Calcular la varianza total del proyecto
+    varianza_proyecto = sum(act[5] for act in actividades_con_varianza)
+    
+    # Calcular la desviación estándar del proyecto
+    desviacion_estandar_proyecto = sqrt(varianza_proyecto)
+    
+    # Calcular la probabilidad utilizando la distribución normal
+    Z = (tiempo_objetivo - tiempo_esperado_proyecto) / desviacion_estandar_proyecto
     probabilidad = norm.cdf(Z)
+    
     return probabilidad
- 
+
+if __name__ == "__main__":
+    actividades_con_varianza = obtener_actividades_con_varianza()
+    tiempo_objetivo = 12  # Define tu tiempo objetivo
+    probabilidad = calcular_probabilidad(tiempo_objetivo, actividades_con_varianza)
+    
+    print("Actividades con varianza:")
+    for act in actividades_con_varianza:
+        print(act)
+    
+    print(f"Probabilidad de completar el proyecto en {tiempo_objetivo} días: {probabilidad * 100:.2f}%")
