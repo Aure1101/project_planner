@@ -2,16 +2,18 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from gantt_view import Gantt
 import activity_creator as ac
-
+from pert_view import Pert
 
 window = tk.Tk()
 
 menu = tk.Frame(window)
 display = tk.Frame(window)
 
-gantt = Gantt(display)
+#gantt = Gantt(display)
 
-add_button = tk.Button(menu, text = 'Añadir Actividad', command=lambda:ac.open_(gantt))
+pert = Pert(display)
+
+add_button = tk.Button(menu, text = 'Añadir Actividad', command=lambda:ac.open_(pert))
 #En lugar de estos botones podriamos usar pestañas para cambiar entre las vistas
 gauss_button = tk.Button(menu, text = 'Visualizar\nDiagrama de Gantt')
 pert_button = tk.Button(menu, text = 'Visualizar\nPERT-CPM')

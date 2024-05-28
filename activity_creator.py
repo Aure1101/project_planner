@@ -85,11 +85,11 @@ def open_(parent):
     for i, check in enumerate(checks):
         check.grid(column=0, row=i)
 
-    agregar = tk.Button(ventana_agregar, text='agregar', command=lambda: agregar_actividad(parent, act_nombre.get(), act_responsable.get(), t_esperado.get(), t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_acelerado.get(), c_esperado.get(), c_acelerado.get(), list(map(lambda x: x.get() == '', d_variables)), actividades))
+    agregar = tk.Button(ventana_agregar, text='agregar', command=lambda: agregar_actividad(parent, act_nombre.get(), act_responsable.get(), t_esperado.get(), t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_acelerado.get(), c_esperado.get(), c_acelerado.get(), list(map(lambda x: x.get() == '', d_variables)), actividades, ventana_agregar))
     agregar.grid(row = 4, column = 0)
 
 
-def agregar_actividad(parent, act_nombre, act_responsable, t_esperado, t_optimista, t_m_probable, t_pesimista, t_acelerado, c_esperado, c_acelerado, dependencias, actividades):
+def agregar_actividad(parent, act_nombre, act_responsable, t_esperado, t_optimista, t_m_probable, t_pesimista, t_acelerado, c_esperado, c_acelerado, dependencias, actividades, window):
     dependen = []
     for i, not_checked in enumerate(dependencias):
         if not not_checked:
@@ -97,3 +97,4 @@ def agregar_actividad(parent, act_nombre, act_responsable, t_esperado, t_optimis
         
     dm.create_act(act_nombre, act_responsable, t_esperado, t_optimista, t_m_probable, t_pesimista, t_acelerado, c_esperado, c_acelerado, dependen)
     parent.refresh_activities()
+    window.destroy()
