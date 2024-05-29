@@ -29,31 +29,46 @@ def open_(parent):
 
     t_esperado_label = tk.Label(datos_tiempos, text='Tiempo Esperado')
     t_esperado_label.grid(row=0, column=1)
-    t_esperado = tk.StringVar()
+    t_esperado = tk.IntVar()
     t_esperado_entry = tk.Spinbox(datos_tiempos, from_=1, to=100, textvariable=t_esperado)
     t_esperado_entry.grid(row=1, column=1,)
+    t_esperado_entry.bind('<FocusIn>', lambda _: calc_other_3(t_esperado.get(), t_optimista, t_m_probable, t_pesimista))
+    t_esperado_entry.bind('<FocusOut>', lambda _: calc_other_3(t_esperado.get(), t_optimista, t_m_probable, t_pesimista))
+    t_esperado_entry.bind('<Return>', lambda _: calc_other_3(t_esperado.get(), t_optimista, t_m_probable, t_pesimista))
+
 
     t_optimista_label = tk.Label(datos_tiempos, text='Tiempo\nOptimista')
     t_optimista_label.grid(row=2, column=0)
-    t_optimista = tk.StringVar()
+    t_optimista = tk.IntVar()
     t_optimista_entry = tk.Spinbox(datos_tiempos, from_=1, to=100, textvariable=t_optimista)
     t_optimista_entry.grid(row=3, column=0)
+    t_optimista_entry.bind('<FocusIn>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
+    t_optimista_entry.bind('<FocusOut>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
+    t_optimista_entry.bind('<Return>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
 
     t_m_probable_label = tk.Label(datos_tiempos, text='Tiempo\nMas Probable')
     t_m_probable_label.grid(row=2, column=1)
-    t_m_probable = tk.StringVar()
+    t_m_probable = tk.IntVar()
     t_m_probable_entry = tk.Spinbox(datos_tiempos, from_=1, to=100, textvariable=t_m_probable)
     t_m_probable_entry.grid(row=3, column=1)
+    t_m_probable_entry.bind('<FocusIn>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
+    t_m_probable_entry.bind('<FocusOut>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
+    t_m_probable_entry.bind('<Return>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
+
 
     t_pesimista_label = tk.Label(datos_tiempos, text='Tiempo\nPesimista')
     t_pesimista_label.grid(row=2, column=2)
-    t_pesimista = tk.StringVar()
+    t_pesimista = tk.IntVar()
     t_pesimista_entry = tk.Spinbox(datos_tiempos, from_=1, to=100, textvariable=t_pesimista)
     t_pesimista_entry.grid(row=3, column=2)
+    t_pesimista_entry.bind('<FocusIn>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
+    t_pesimista_entry.bind('<FocusOut>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
+    t_pesimista_entry.bind('<Return>', lambda _: calc_esperado(t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_esperado))
+
     
     t_acelerado_label = tk.Label(datos_tiempos, text='Tiempo\nAcelerado')
     t_acelerado_label.grid(row=4, column=1)
-    t_acelerado = tk.StringVar()
+    t_acelerado = tk.IntVar()
     t_acelerado_entry = tk.Spinbox(datos_tiempos, from_=1, to=100, textvariable=t_acelerado)
     t_acelerado_entry.grid(row=5, column=1)
 
@@ -85,11 +100,11 @@ def open_(parent):
     for i, check in enumerate(checks):
         check.grid(column=0, row=i)
 
-    agregar = tk.Button(ventana_agregar, text='agregar', command=lambda: agregar_actividad(parent, act_nombre.get(), act_responsable.get(), t_esperado.get(), t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_acelerado.get(), c_esperado.get(), c_acelerado.get(), list(map(lambda x: x.get() == '', d_variables)), actividades))
+    agregar = tk.Button(ventana_agregar, text='agregar', command=lambda: agregar_actividad(parent, act_nombre.get(), act_responsable.get(), t_esperado.get(), t_optimista.get(), t_m_probable.get(), t_pesimista.get(), t_acelerado.get(), c_esperado.get(), c_acelerado.get(), list(map(lambda x: x.get() == '', d_variables)), actividades, ventana_agregar))
     agregar.grid(row = 4, column = 0)
 
 
-def agregar_actividad(parent, act_nombre, act_responsable, t_esperado, t_optimista, t_m_probable, t_pesimista, t_acelerado, c_esperado, c_acelerado, dependencias, actividades):
+def agregar_actividad(parent, act_nombre, act_responsable, t_esperado, t_optimista, t_m_probable, t_pesimista, t_acelerado, c_esperado, c_acelerado, dependencias, actividades, window):
     dependen = []
     for i, not_checked in enumerate(dependencias):
         if not not_checked:
@@ -97,3 +112,13 @@ def agregar_actividad(parent, act_nombre, act_responsable, t_esperado, t_optimis
         
     dm.create_act(act_nombre, act_responsable, t_esperado, t_optimista, t_m_probable, t_pesimista, t_acelerado, c_esperado, c_acelerado, dependen)
     parent.refresh_activities()
+    window.destroy()
+
+def calc_esperado(t_optimista, t_m_probable, t_pesimista, t_esperado_var):
+    t_esperado_var.set((t_optimista + 4 * t_m_probable + t_pesimista) // 6)
+
+def calc_other_3(t_esperado, t_optimista_var, t_m_probable_var, t_pesimista_var):
+    t_optimista_var.set(t_esperado)
+    t_m_probable_var.set(t_esperado)
+    t_pesimista_var.set(t_esperado)
+    pass

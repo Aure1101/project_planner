@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from gantt_view import Gantt
 import activity_creator as ac
+from pert_view import Pert
 from editor_actividad import open_selector
 
 window = tk.Tk()
@@ -9,12 +10,31 @@ window = tk.Tk()
 menu = tk.Frame(window)
 display = tk.Frame(window)
 
-gantt = Gantt(display)
+in_use = Gantt(display)
 
-add_button = tk.Button(menu, text='Añadir Actividad', command=lambda: ac.open_(gantt))
-edit_button = tk.Button(menu, text='Editar Actividad', command=lambda: open_selector(gantt))
-gauss_button = tk.Button(menu, text='Visualizar\nDiagrama de Gantt')
-pert_button = tk.Button(menu, text='Visualizar\nPERT-CPM')
+def set_pert():
+    global in_use
+    display.grid_forget()
+    in_use = Pert(display)
+    display.rowconfigure(0, weight=1)
+    display.columnconfigure(0, weight=1)
+    display.grid(column=0, row=0, sticky='NSEW')
+
+
+def set_gantt():
+    global in_use, display
+    display.grid_forget()
+    in_use = Gantt(display)
+    display.rowconfigure(0, weight=1)
+    display.columnconfigure(0, weight=1)
+    display.grid(column=0, row=0, sticky='NSEW')
+
+
+
+gauss_button = tk.Button(menu, text = 'Visualizar\nDiagrama de Gantt', command = set_gantt)
+pert_button = tk.Button(menu, text = 'Visualizar\nPERT-CPM', command = set_pert)
+add_button = tk.Button(menu, text='Añadir Actividad', command=lambda: ac.open_(in_use))
+edit_button = tk.Button(menu, text='Editar Actividad', command=lambda: open_selector(in_use))
 
 menu.grid(column=1, row=0)
 display.grid(column=0, row=0, sticky='NSEW')
