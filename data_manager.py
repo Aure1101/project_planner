@@ -107,3 +107,16 @@ def update_act(old_name, new_name, responsable, t_esperado, t_optimista, t_m_pro
         act.at[idx, 'costo_acelerado'] = c_acelerado
         act.at[idx, 'dependencias'] = ','.join(dependencias)
         act.to_csv('actividades.csv', index=False)
+
+#---------------------Funciones para el editor ------------------------
+def get_all_activities():
+    return pd.read_csv('actividades.csv')
+
+def get_all_dependencies():
+    return pd.read_csv('dependencias.csv')
+
+def update_activities_dataframe(df):
+    df.to_csv('actividades.csv', index=False)
+
+def update_dependencies_dataframe(df):
+    df.to_csv('dependencias.csv', index=False)
