@@ -53,8 +53,12 @@ def add_dependencies(depender, dependencias):
         dep = pd.concat([dep,row])
     dep.to_csv('dependencias.csv', index=False)
 
-def delete_act():
-    pass
+def delete_activity(self):
+        
+        if self.selected_activity:
+            del self.activities[self.selected_activity]
+            self.refresh_activities()
+
 
 def update_completition():
     pass
@@ -79,3 +83,40 @@ def get_dependencies(actividad):
     mask = dep['actividad'] == actividad
     print(dep[mask].to_numpy()[:, 1])
     return dep[mask].to_numpy()[:, 1]
+
+def get_activity_by_name(name):
+    act = pd.read_csv('actividades.csv')
+    activity = act[act['nombre_actividad'] == name]
+    if activity.empty:
+        return None
+    return activity.iloc[0].to_dict()
+
+def update_act(old_name, new_name, responsable, t_esperado, t_optimista, t_m_probable, t_pesimista, t_acelerado, c_esperado, c_acelerado, dependencias):
+    act = pd.read_csv('actividades.csv')
+    idx = act[act['nombre_actividad'] == old_name].index
+    if not idx.empty:
+        idx = idx[0]
+        act.at[idx, 'nombre_actividad'] = new_name
+        act.at[idx, 'responsable'] = responsable
+        act.at[idx, 'tiempo_esperado'] = t_esperado
+        act.at[idx, 'tiempo_optimista'] = t_optimista
+        act.at[idx, 'tiempo_mas_probable'] = t_m_probable
+        act.at[idx, 'tiempo_pesimista'] = t_pesimista
+        act.at[idx, 'tiempo_acelerado'] = t_acelerado
+        act.at[idx, 'costo_esperado'] = c_esperado
+        act.at[idx, 'costo_acelerado'] = c_acelerado
+        act.at[idx, 'dependencias'] = ','.join(dependencias)
+        act.to_csv('actividades.csv', index=False)
+
+#---------------------Funciones para el editor ------------------------
+def get_all_activities():
+    return pd.read_csv('actividades.csv')
+
+def get_all_dependencies():
+    return pd.read_csv('dependencias.csv')
+
+def update_activities_dataframe(df):
+    df.to_csv('actividades.csv', index=False)
+
+def update_dependencies_dataframe(df):
+    df.to_csv('dependencias.csv', index=False)
