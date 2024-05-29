@@ -9,14 +9,30 @@ window = tk.Tk()
 menu = tk.Frame(window)
 display = tk.Frame(window)
 
-#gantt = Gantt(display)
+in_use = Gantt(display)
+add_button = tk.Button(menu, text = 'Añadir Actividad', command=lambda:ac.open_(in_use))
 
-pert = Pert(display)
+def set_pert():
+    global in_use
+    display.grid_forget()
+    in_use = Pert(display)
+    display.rowconfigure(0, weight=1)
+    display.columnconfigure(0, weight=1)
+    display.grid(column=0, row=0, sticky='NSEW')
 
-add_button = tk.Button(menu, text = 'Añadir Actividad', command=lambda:ac.open_(pert))
-#En lugar de estos botones podriamos usar pestañas para cambiar entre las vistas
-gauss_button = tk.Button(menu, text = 'Visualizar\nDiagrama de Gantt')
-pert_button = tk.Button(menu, text = 'Visualizar\nPERT-CPM')
+
+def set_gantt():
+    global in_use, display
+    display.grid_forget()
+    in_use = Gantt(display)
+    display.rowconfigure(0, weight=1)
+    display.columnconfigure(0, weight=1)
+    display.grid(column=0, row=0, sticky='NSEW')
+
+
+
+gauss_button = tk.Button(menu, text = 'Visualizar\nDiagrama de Gantt', command = set_gantt)
+pert_button = tk.Button(menu, text = 'Visualizar\nPERT-CPM', command = set_pert)
 
 menu.grid(column=1, row=0)
 display.grid(column=0, row=0, sticky='NSEW')

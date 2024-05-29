@@ -11,6 +11,7 @@ class Pert(tk.Frame):
         self.refresh_activities()
 
     def refresh_activities(self):
+        print('PERT')
         self.grid_forget()
         self.fig = Figure()
 

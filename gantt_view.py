@@ -11,6 +11,7 @@ class Gantt(tk.Frame):
 
 
     def refresh_activities(self):
+        print('Gantt')
         self.grid_forget()
         activities = dm.get_activities_gantt()
 
